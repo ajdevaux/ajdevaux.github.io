@@ -113,8 +113,8 @@ div2 = Div(text=
         <li>Lea Caduff</li>
         <li>Pravin Ganesanandamoorthy</li>
         <li>Charlie Gan</li>
-        <li>Johannes Rusch</li>        
-        <li>Franszska Böni</li>
+        <li>Johannes Rusch</li>
+        <li>Franziska Böni</li>
         <li>A.J. Devaux (<a href = "mailto:alexander.devaux@eawag.ch">Webmaster</a>)</li>
         <li>And the rest of the Eawag & EPFL Team</li>
     </ul>
