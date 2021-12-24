@@ -28,7 +28,7 @@ for wwtp in wwtp_list:
 
     p = figure(
         plot_height=400,
-        plot_width=400,
+        plot_width=500,
         x_axis_type="datetime",
         title=f"{wwtp}",
         tools=TOOLS,
