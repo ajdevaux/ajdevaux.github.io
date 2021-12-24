@@ -43,7 +43,7 @@ for wwtp in wwtp_list:
     delta_src = ColumnDataSource(delta_df)
     omi_src = ColumnDataSource(omicron_df)
 
-    p.circle(x="sample_date", y="PercMutation", color="lightgreen", size=6, line_alpha=0,legend_label="Delta (B.1.6172)",source=delta_src)
+    p.circle(x="sample_date", y="PercMutation", color="lightgreen", size=6, line_alpha=0,legend_label="Delta (B.1.617.2)",source=delta_src)
     p.line(x="sample_date", y="PercMutation", color="lightgreen", line_width=3,source=delta_src)
     p.circle(x="sample_date", y="PercMutation", color="blue", size=6, line_alpha=0,legend_label="Omicron (B.1.1.529)",source=omi_src)
     p.line(x="sample_date", y="PercMutation", color="blue", line_width=3,source=omi_src)
@@ -96,5 +96,5 @@ logo1 = Div(text=
     """
 )
 header = row(div1,logo1, sizing_mode="scale_width")
-grid = gridplot(plot_list,ncols=3,toolbar_location="left")
+grid = gridplot(plot_list,ncols=2,toolbar_location="left")
 show(column(header,grid),background="black")
