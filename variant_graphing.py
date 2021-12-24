@@ -90,7 +90,7 @@ for wwtp in wwtp_list:
 # y = zh_df.PercMutation
 # pc = particle_df.pc
 curdoc().theme = 'dark_minimal'
-output_file('variant_monitoring.html')
+output_file('variant_monitoring.html',title="CoWWID Variant Monitoring")
 div1 = Div(text=
     """
     <style>
