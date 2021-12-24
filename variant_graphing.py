@@ -108,13 +108,14 @@ logo1 = Div(text=
 )
 div2 = Div(text=
     """
-    <p style="color:white;">This data made possible by the tireless work of:</p>
+    <p style="color:white;">These data made possible by the tireless work of:</p>
     <ul style="color:white;">
         <li>Lea Caduff</li>
         <li>Pravin Ganesanandamoorthy</li>
         <li>Charlie Gan</li>
         <li>Johannes Rusch</li>
         <li>Franziska Böni</li>
+        <li>David Dreifuss</li>
         <li>A.J. Devaux (<a href = "mailto:alexander.devaux@eawag.ch">Webmaster</a>)</li>
         <li>And the rest of the Eawag & EPFL Team</li>
     </ul>
