@@ -106,7 +106,7 @@ logo1 = Div(text=
     <img src='images/logo_epfl_white.png' style="width:169px;height:49;border:10px solid black;">
     """
 )
-div2 = Div(text=
+footer = Div(text=
     """
     <p style="color:white;">These data made possible by the tireless work of:</p>
     <ul style="color:white;">
@@ -123,4 +123,4 @@ div2 = Div(text=
 )
 header = row(div1,logo1, sizing_mode="scale_width")
 grid = gridplot(plot_list,ncols=2,toolbar_location="left")
-show(column(header,grid,div2),background="black")
+show(column(header,grid,footer),background="black")
