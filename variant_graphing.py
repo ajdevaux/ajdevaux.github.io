@@ -43,7 +43,7 @@ for i,wwtp in enumerate(wwtp_list):
     omicron_df = subplot_df[subplot_df["target_variant"] ==  '69-70del (Alpha, Omicron)']
     # colormap = {'S:L452R (Delta)': 'lightgreen', '69-70del (Alpha, Omicron)': 'cyan'}
     # subplot_df['colors'] = [colormap[x] for x in zh_df['target_variant']]
-    if i != 0:
+    if i > 0:
         x_range = plot_list[0].x_range
         y_range = plot_list[0].y_range
     else:
@@ -72,11 +72,11 @@ for i,wwtp in enumerate(wwtp_list):
     omi_src = ColumnDataSource(omicron_df)
 
 
-    p.line(color="lightgreen",legend_label="Delta (B.1.617.2)",source=delta_src,**plot_props)
-    p.circle(color="green", size=6, line_alpha=0,source=delta_src,**plot_props)
+    p.line(source=delta_src,color="lightgreen",legend_label="Delta (B.1.617.2)",**plot_props)
+    p.circle(source=delta_src,color="green", size=6,**plot_props)
 
-    p.line(color="orange",legend_label="Omicron (B.1.1.529)",source=omi_src,**plot_props)
-    p.circle( color="darkorange", size=6, line_alpha=0,source=omi_src,**plot_props)
+    p.line(source=omi_src,color="orange",legend_label="Omicron (B.1.1.529)",**plot_props)
+    p.circle(source=omi_src,color="darkorange", size=6,**plot_props)
 
 
     p.add_layout(
@@ -94,7 +94,7 @@ for i,wwtp in enumerate(wwtp_list):
         )
     )
 
-    p.legend.location = "bottom_left"
+    p.legend.location = "center_left"
     # p.legend.click_policy="hide"
 
     plot_list.append(p)
