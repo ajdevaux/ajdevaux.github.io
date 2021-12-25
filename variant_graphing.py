@@ -17,7 +17,7 @@ wwtp_list=["ARA Werdhölzli","STEP Aire","ARA Altenrhein","ARA Chur","CDA Lugano
 
 
 
-TOOLS = "reset,xpan,wheel_zoom,xbox_zoom,save"
+TOOLS = "reset,xpan,xwheel_zoom,xbox_zoom,save"
 
 plot_props = {
     "x":"sample_date",
