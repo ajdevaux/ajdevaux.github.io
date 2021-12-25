@@ -15,9 +15,15 @@ variant_df.index = pd.to_datetime(variant_df.index)
 
 wwtp_list=["ARA Werdhölzli","STEP Aire","ARA Altenrhein","ARA Chur","CDA Lugano","ARA Sensetal"]
 
-plot_list = []
 
-TOOLS = "pan,wheel_zoom,box_zoom,reset,save"
+
+TOOLS = "reset,xpan,wheel_zoom,xbox_zoom,save"
+
+plot_props = {
+    "x":"sample_date",
+    "y":"PercMutation",
+    "line_width":3
+}
 
 whisker_props = {
     "base":"sample_date",
@@ -28,13 +34,21 @@ whisker_props = {
     "upper_head":None,
     "lower_head":None
 }
-for wwtp in wwtp_list:
+
+plot_list = []
+for i,wwtp in enumerate(wwtp_list):
     subplot_df = variant_df[variant_df["wwtp"]==wwtp].copy()
 
     delta_df = subplot_df[subplot_df["target_variant"] ==  "S:L452R (Delta)"]
     omicron_df = subplot_df[subplot_df["target_variant"] ==  '69-70del (Alpha, Omicron)']
     # colormap = {'S:L452R (Delta)': 'lightgreen', '69-70del (Alpha, Omicron)': 'cyan'}
     # subplot_df['colors'] = [colormap[x] for x in zh_df['target_variant']]
+    if i != 0:
+        x_range = plot_list[0].x_range
+        y_range = plot_list[0].y_range
+    else:
+        x_range = (pd.to_datetime("08-01-2021"), pd.to_datetime(datetime.now().date()))
+        y_range = (-5, 105)
 
     p = figure(
         plot_height=400,
@@ -42,8 +56,8 @@ for wwtp in wwtp_list:
         x_axis_type="datetime",
         title=f"{wwtp}",
         tools=TOOLS,
-        x_range=(pd.to_datetime("08-01-2021"), pd.to_datetime(datetime.now().date())),
-        y_range=(-5, 105)
+        x_range=x_range,
+        y_range=y_range
 
     )
     p.title.text_font_size = '16pt'
@@ -58,10 +72,11 @@ for wwtp in wwtp_list:
     omi_src = ColumnDataSource(omicron_df)
 
 
-    p.line(x="sample_date", y="PercMutation", color="lightgreen", line_width=3,legend_label="Delta (B.1.617.2)",source=delta_src)
-    p.circle(x="sample_date", y="PercMutation", color="green", size=6, line_alpha=0,source=delta_src)
-    p.line(x="sample_date", y="PercMutation", color="orange", line_width=3,legend_label="Omicron (B.1.1.529)",source=omi_src)
-    p.circle(x="sample_date", y="PercMutation", color="darkorange", size=6, line_alpha=0,source=omi_src)
+    p.line(color="lightgreen",legend_label="Delta (B.1.617.2)",source=delta_src,**plot_props)
+    p.circle(color="green", size=6, line_alpha=0,source=delta_src,**plot_props)
+
+    p.line(color="orange",legend_label="Omicron (B.1.1.529)",source=omi_src,**plot_props)
+    p.circle( color="darkorange", size=6, line_alpha=0,source=omi_src,**plot_props)
 
 
     p.add_layout(
