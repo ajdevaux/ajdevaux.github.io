@@ -1,0 +1,50 @@
+﻿"ARA ID 
+(Eawag/EPFL)",Kanton,ARANR (GIS),StadtNAME,ARANAME,"Angeschlossene Einwohner
+(BAFU 2017)","Angeschlossene Einwohner 
+(Angabe ARA)",Kantonale Bevölkerung,"Kontakt
+Person","Kontakt
+Telefon","Kontakt
+Mail",Adresse
+01_,TI,526800,Vacallo/Chiasso,CDA Chiasso,28666,29135,353343,Stefano Airaghi,091 695 56 80,"segreteria@ lembo.g@ (lab) 
+s.airaghi@cdacd.ch","Via del Breggia 7, 6833 Vacallo"
+02_,TI,526200,Rancate,CDA Mendrisio,29009,29100,353343,,091 646 58 52,laboratorio@cdamendrisio.ch,"Via Prati Maggi 12, 6862 Rancate
+(in google: ""via pra mag 12 6862 rancate"")"
+03_,TI,514700,Barbengo/Lugano,CDA Scairolo,11585,max. 20000 EGW (website),353343,,091 985 41 50,christian@depacque.ch (lab),"via Mugnée 6, 6918 Figino"
+04_,TI,517800,Croglio/Purasca,CDA Magliasina,15014,15 000 (Inhabitans),353343,,091 606 49 03,"ruggia.davide@cdama.ch (lab)
+simoni.michele@cdama.ch","Strada Cantonale 22, 6989 Purasca"
+05_,TI,515100,Bioggio,CDA Lugano,124990,123640,353343,Lorenzo Balmelli,058 866 40 11,"lorenzo.balmelli@cdaled.ch 
+nora.mattei@cdaled.ch (lab)","via Molinazzo 1, 6934 Bioggio"
+06_,TI,511301,Foce Ticino/Gordola,CDA Verbano/Ticino,24412,40000 (website),353343,Moreno Mozzeti,091 745 38 67,moreno.mozzetti@cdverbano.ch,"Via dei Borghesi, 6596 Gordola"
+07_,TI,500500,Giubiasco,CDA Bellinzona,53201,55000 (Inhabitans),353343,G.Grossi,091 857 45 51,"ida@cdabr.ch 
+giancarlo.grossi@cdabr.ch","Strada delle Pezze 2, 6512 Giubiasco"
+08_,TI,528100,Biasca,CDA Biasca,12991,12955 (Inhabitans),353343,,091 873 01 80,"damiano.monighetti@cdabiasca.ch (lab)
+nicola.ferrari@cdabiasca.ch","via Chiasso 48, 6710 Biasca"
+09_,TI,511302,Locarno,CDA Verbano/Maggia,51373,51373,353343,Moreno Mozzeti,091 756 69 30,"moreno.mozzetti@cdverbano.ch 
+","Via G. Canevascini 20, 6600 Locarno"
+10_,ZH,26101,Zürich,ARA Werdhölzli,429371,450000,-9999,Rey Eyer,"079 662 04 96 
+044 645 52 63","rey.eyer@zuerich.ch
+christian.abegglen@zuerich.ch","Bändlistrasse 108, 8064 Zürich"
+11.1_,ZH,6602,Kloten+Flughafen (KF),ARA Kloten/Opfikon (KF),37167,"Zulauf ARA 80-85`000EW,
+Kloten 20`000E, 
+Opfikon 20`000E",1'520'968,Philip Rüegsegger,044 874 17 06,p.rueegsegger@klaeranlage.ch,"Rohrstrasse 49, CH- 8152 Glattbrugg."
+11.2_,ZH,6602,Kloten (K),ARA Kloten (K),,"Zulauf ARA 80-85`000EW,
+Kloten 20`000E, 
+Opfikon 20`000E",1'520'968,Philip Rüegsegger,044 874 17 06,p.rueegsegger@klaeranlage.ch,"Rohrstrasse 49, CH- 8152 Glattbrugg."
+12_,VD,558600,Lausanne,STEP Vidy,235359,240000,799145,,,,"Route de Vidy 10, 1007 Lausanne"
+13_,AG,420300,Lenzburg,ARA Langmatt,50407,53748,678207,Roman Bieri,079 641 40 55 / 062 896 70 30,roman.bieri@avrl.ch,"Langmatt 886, 5103 Wildegg"
+14_,BE,36200,Bern,ARA Worblental,70195,70195,1035000,Herr Streun,,ch.streun@ara-worblental.ch,"Arastrasse 50, 3048 Worblaufen"
+15_,BS,270101,Basel,ARA Basel/Prorheno,268317,268317,261797,Rolf Froehlin,,rolf.froehlin@prorheno.ch,"Grenzstrasse 15, 4019 Basel"
+16_,GE,664301,Genf,STEP Aire,440750,451771,499480,"Axel Wahl
+Eric Rosset",022 727 4730 (laboratoire Zentrale) ; 079 530 25 72 (Axel Wahl); Eric Rosset 022 727 47 30,"Axel.Wahl@sig-ge.ch 
+eric.rosset@sig-ge.ch","Chemin de la verseuse 17, 1219 Aïre"
+17_,GR,390101,Chur,ARA Chur,54610,55405,198379,Curdin Hedinger,081 254 49 17 / 079 574 82 44,curdin.hedinger@chur.ch,"Rheinmühleweg 87, 7000 Chur"
+18_,LU,102400,Luzern,ARA Buholz,178555,178555,409557,"Alexander Kleiner
+Arne Zumbach",,Axel.Wahl@sig-ge.ch,"Buhholzstr. 32, 6032 Emmen"
+19_,SG,323700,Altenrhein,ARA Altenrhein,55968,63738,507697,Hansruedi Graf,071 858 67 05,hansruedi.graf@ava-altenrhein.ch,"Wiesenstrasse 32, 9423 Altenrhein"
+20_,SH,293700,Schaffhausen,ARA Röti,55740,56626,81991,Oliver Kühn,052 674 06 74,hansruedi.graf@ava-altenrhein.ch,"Badstrasse 40, 8212 Neuhausen"
+21_,SZ,132200,Freienbach,ARA Hoefe,28788,29471,159165,Karin Thum,,karin.thum@arahoefe.ch,"Seeweg 6, 8807 Freienbach"
+22_,FR,219600,Fribourg,ARA Fribourg,43681,44081,318714,Mario Folly,079 309 98 11,Mario.Folly@sinef.ch,"Route des Neigles 50, 1700 Fribourg"
+23_,BL,286100,Ergolz 1,ARA Ergolz 1,28503,30000,288133,Markus Vock,061 315 10 60,markus.vock@bl.ch,"Freulerstrasse 1, 4127 Birsfelden"
+24_,VS,603102,Verbier,STEP de Profray,7788,,343'955,Jean-Marc Conus,027 777 10 62,jean-marc.conus@altis.swiss,"Ch. de Profray 5, 1934 Le Châble VS"
+25_,BE,66700,Laupen,ARA Sensetal,57779,,1'034'977,Bernhard Hostettler,,geschaeftsleitung.ara@sensetal.ch,"Hirsriedweg, 3177 Laupen"
+26_,SH,,Schaffhausen,ARA Hallau,,,,,,,

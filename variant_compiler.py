@@ -244,7 +244,7 @@ if __name__ == '__main__':
 
     # q_dir = get_q_dir()
 
-    wwtp_df = get_wwtp_df("funcs/wwtp_info.csv")
+    wwtp_df = get_wwtp_df("data/wwtp_info.csv")
 
     os.chdir("/Volumes/PCR_Cowwid/01_dPCR_data/01_Stilla/NCX_CowwidVariants/04_Delta_Monitoring_Excel_new")
     excel_list = sorted(glob.glob("**/[!~]*.xlsx"))
