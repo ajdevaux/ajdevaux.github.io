@@ -7,15 +7,12 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 
-
 data = "data/variant_data.csv"
 variant_df = pd.read_csv(data)
 variant_df.set_index("sample_date",inplace=True)
 variant_df.index = pd.to_datetime(variant_df.index)
 
 wwtp_list=["ARA Werdhölzli","STEP Aire","ARA Altenrhein","ARA Chur","CDA Lugano","ARA Sensetal"]
-
-
 
 TOOLS = "reset,xpan,xwheel_zoom,xbox_zoom,save"
 
