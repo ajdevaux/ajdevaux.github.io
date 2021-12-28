@@ -266,6 +266,20 @@ def loglik_trinom_prof(droplet_cts,ratio):
         # print(trinomial)
         return trinomial
 ##------------------------------------------------------------------------------------------------##
+def get_wwtp_df(wwtp_data_src):
+
+    wwtp_df = pd.read_csv(wwtp_data_src,header=0)
+    wwtp_df = wwtp_df[["ARA ID \n(Eawag/EPFL)", "ARANAME","Kanton","ARANR (GIS)",
+                       "StadtNAME","Angeschlossene Einwohner\n(BAFU 2017)"]]
+    wwtp_df.rename(columns = {"ARA ID \n(Eawag/EPFL)":"ARA_ID",
+                              "Angeschlossene Einwohner\n(BAFU 2017)":"Population"}, inplace=True)
+    wwtp_df.replace(to_replace="/",value="-",regex=True, inplace=True)
+    wwtp_df["ARA_ID"] = wwtp_df["ARA_ID"].str.strip("_")
+    wwtp_df["StadtNAME"] = wwtp_df["StadtNAME"].str.lower()
+
+    wwtp_df.set_index("ARA_ID", inplace=True)
+
+    return wwtp_df
 # def lower_e(droplet_cts, level=0.95):
 #     """
 #     Function translated from R, orig. author David Dreifuss:
@@ -398,7 +412,7 @@ def calc_error(droplet_cts, mode, level=0.95):
 if __name__ == '__main__':
 
     gc = gspread.service_account(filename="cowwid-wave5-e31fa2771e32.json")
-    wwtp_df = pd.read_csv("data/wwtp_info.csv")
+    wwtp_df = get_wwtp_df("data/wwtp_info.csv")
 
     os.chdir("/Volumes/PCR_Cowwid/01_dPCR_data/01_Stilla/NCX_CowwidVariants/04_Delta_Monitoring_Excel_new")
     excel_list = sorted(glob.glob("**/[!~]*.xlsx"))
@@ -484,7 +498,7 @@ if __name__ == '__main__':
 
     # with pd.ExcelWriter("VariantResults.xlsx", date_format="YYYY-MM-DD", engine="openpyxl") as writer:
     #     variant_df.to_excel(writer, sheet_name="Results", index=True)
-
+    os.chdir("/Volumes/KatahdinHD/ResilioSync/DATA/pydata/cowwid/cowwid_website/variant_monitoring")
     ##Upload to Google_sheet
 
     droplet_cols = [
@@ -499,8 +513,11 @@ if __name__ == '__main__':
     final_variant_df = variant_df[droplet_cols].copy()
     final_variant_df.dropna(axis=0,subset=["sample_date"],inplace=True)
 
-    gsheet_groupby = final_variant_df.groupby(["wwtp","sample_date","target_variant"])
-    final_variant_df = gsheet_groupby.sum(min_count=1)
+    final_variant_df = final_variant_df.groupby([
+        "wwtp",
+        "sample_date",
+        "target_variant"
+    ]).sum(min_count=1)
 
     calc_cols = [
         "TotalDroplets",
