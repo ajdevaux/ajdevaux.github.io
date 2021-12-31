@@ -24,8 +24,8 @@ plot_props = {
 
 whisker_props = {
     "base":"sample_date",
-    "upper":"upper_ci",
-    "lower":"lower_ci",
+    "upper":"upper_ci95",
+    "lower":"lower_ci95",
     "line_width":2,
     "line_cap":"round",
     "upper_head":None,
@@ -38,8 +38,7 @@ for i,wwtp in enumerate(wwtp_list):
 
     delta_df = subplot_df[subplot_df["target_variant"] ==  "S:L452R (Delta)"]
     omicron_df = subplot_df[subplot_df["target_variant"] ==  '69-70del (Alpha, Omicron)']
-    # colormap = {'S:L452R (Delta)': 'lightgreen', '69-70del (Alpha, Omicron)': 'cyan'}
-    # subplot_df['colors'] = [colormap[x] for x in zh_df['target_variant']]
+
     if i > 0:
         x_range = plot_list[0].x_range
         y_range = plot_list[0].y_range
@@ -68,7 +67,6 @@ for i,wwtp in enumerate(wwtp_list):
     delta_src = ColumnDataSource(delta_df)
     omi_src = ColumnDataSource(omicron_df)
 
-
     p.line(source=delta_src,color="lightgreen",legend_label="S:L452R (Delta/B.1.617.2)",**plot_props)
     p.circle(source=delta_src,color="green", size=6,**plot_props)
 
@@ -95,14 +93,10 @@ for i,wwtp in enumerate(wwtp_list):
     # p.legend.click_policy="hide"
 
     plot_list.append(p)
-# p.circle('petal_length', 'petal_width', color='colors',
-#          fill_alpha=0.2, size=10, source=ColumnDataSource(flowers))
-# data['y_fixed'] = [1200 - val for val in data.y]
-# x = zh_df.sample_date
-# y = zh_df.PercMutation
-# pc = particle_df.pc
+
 curdoc().theme = 'dark_minimal'
 output_file('variant_monitoring.html',title="CoWWID Variant Monitoring")
+
 div1 = Div(text=
     """
     <style>

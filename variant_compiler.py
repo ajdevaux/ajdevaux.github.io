@@ -532,8 +532,8 @@ if __name__ == '__main__':
     final_variant_df["NegativeDroplets"] = calc_df.apply(calc_neg_droplets,axis=1)
     final_variant_df["PercMutation"] = calc_df.apply(calc_perc_mutation,axis=1)
     final_variant_df["r̂"] = calc_df.apply(r_hat,axis=1)
-    final_variant_df["lower_ci"] = calc_df.apply(calc_error,axis=1,mode="lower",level=0.95)*100
-    final_variant_df["upper_ci"] = calc_df.apply(calc_error,axis=1,mode="upper",level=0.95)*100
+    final_variant_df["lower_ci95"] = calc_df.apply(calc_error,axis=1,mode="lower",level=0.95)*100
+    final_variant_df["upper_ci95"] = calc_df.apply(calc_error,axis=1,mode="upper",level=0.95)*100
 
     final_variant_df.to_csv("data/variant_data.csv")
 
