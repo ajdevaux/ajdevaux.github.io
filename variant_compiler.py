@@ -342,7 +342,21 @@ def calc_error(droplet_cts, mode, level=0.95):
 
         except ValueError:
             return 1
+
 ##------------------------------------------------------------------------------------------------##
+def ddpcr_concentration(droplet_cts, droplet_volume_uL=0.000519):
+
+    tot_ct, mutat_ct, wldtp_ct, unkwn_ct = _parse_assay_counts(droplet_cts)
+
+    pos_ct = mutat_ct + wldtp_ct + unkwn_ct
+
+    if pos_ct == 0:
+        return 0
+    else:
+        return np.log(1 - (pos_ct / tot_ct)) * -(1/droplet_volume_uL)
+##------------------------------------------------------------------------------------------------##
+
+
 if __name__ == '__main__':
 
     gc = gspread.service_account(filename="cowwid-wave5-e31fa2771e32.json")
@@ -465,11 +479,12 @@ if __name__ == '__main__':
     calc_df = final_variant_df[calc_cols]
 
     final_variant_df["NegativeDroplets"] = calc_df.apply(calc_neg_droplets,axis=1)
-    # final_variant_df["PercMutation"] = calc_df.apply(calc_perc_mutation,axis=1)
+
     final_variant_df["PercMutation"] = calc_df.apply(r_hat,axis=1) * 100
     final_variant_df["lower_ci95"] = calc_df.apply(calc_error,axis=1,mode="lower",level=0.95)*100
     final_variant_df["upper_ci95"] = calc_df.apply(calc_error,axis=1,mode="upper",level=0.95)*100
-
+    final_variant_df["hCoV19Concentration_(gc/rxn)"] = calc_df.apply(ddpcr_concentration,axis=1)
+    
     final_variant_df.to_csv("data/variant_data.csv")
 
     gsheet = gc.open("COWWID LAB SHEET")
