@@ -43,7 +43,7 @@ for i,wwtp in enumerate(wwtp_list):
         x_range = plot_list[0].x_range
         y_range = plot_list[0].y_range
     else:
-        x_range = (pd.to_datetime("08-01-2021"), pd.to_datetime(datetime.now().date()))
+        x_range = (pd.to_datetime("11-01-2021"), pd.to_datetime(datetime.now().date()))
         y_range = (-5, 105)
 
     p = figure(
@@ -70,7 +70,7 @@ for i,wwtp in enumerate(wwtp_list):
     p.line(source=delta_src,color="lightgreen",legend_label="S:L452R (Delta/B.1.617.2)",**plot_props)
     p.circle(source=delta_src,color="green", size=6,**plot_props)
 
-    p.line(source=omi_src,color="orange",legend_label="HV69-70 (Omicron/B.1.1.529)",**plot_props)
+    p.line(source=omi_src,color="orange",legend_label="HV69-70 (Omicron-BA.1/B.1.1.529)",**plot_props)
     p.circle(source=omi_src,color="darkorange", size=6,**plot_props)
 
 
