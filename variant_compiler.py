@@ -14,6 +14,8 @@ import seaborn as sns
 import gspread
 import gspread_dataframe as gsdf
 
+from datetime import datetime
+
 pd.set_option("display.width", 1000)
 pd.options.display.max_rows = 2000
 pd.options.display.max_columns = 15
@@ -280,75 +282,7 @@ def get_wwtp_df(wwtp_data_src):
     wwtp_df.set_index("ARA_ID", inplace=True)
 
     return wwtp_df
-# def lower_e(droplet_cts, level=0.95):
-#     """
-#     Function translated from R, orig. author David Dreifuss:
-#
-#     lower_e <- function(x, level=0.95){
-#       if(is.nan(r_hat(x))){
-#         return(NaN)
-#       }else if(r_hat(x) == 0){
-#         return(0)
-#       }else{
-#         uniroot(function(y){2*(loglik_trinom_prof(x,y) - loglik_trinom_prof(x,r_hat(x))) + qchisq(level, 1)},
-#                 interval=c(0, r_hat(x)))$root
-#       }
-#     }"""
-#     r_hat_val = r_hat(droplet_cts)
-#     if np.isnan(r_hat_val):
-#         print(np.nan)
-#         return np.nan
-#     elif r_hat_val == 0:
-#         print(0)
-#         return 0
-#     else:
-#         lp_rhat = loglik_trinom_prof(droplet_cts, r_hat_val)
-#         chi_sq = sps.chi2.ppf(level, 1)
-#
-#         try:
-#             root = spo.brentq(lambda r: 2*(loglik_trinom_prof(droplet_cts,r) - lp_rhat) + chi_sq,
-#                 a=0.00001, ##Should be zero
-#                 b=r_hat_val
-#             )
-#             return root
-#         except ValueError:
-#             return np.nan
-##------------------------------------------------------------------------------------------------##
-# def upper_e(droplet_cts, level=0.95):
-#     """
-#     Function translated from R, orig. author David Dreifuss:
-#
-#     upper_e <- function(x, level=0.95){
-#       if (is.nan(r_hat(x))){
-#         return(NaN)
-#       }else if (r_hat(x) == 1){
-#         return(1)
-#       }else{
-#         uniroot(function(y){2*(loglik_trinom_prof(x,y) - loglik_trinom_prof(x,r_hat(x))) + qchisq(level, 1)},
-#                 interval=c(r_hat(x), 1), f.lower = qchisq(level, 1))$root
-#       }
-#     }
-#     """
-#     r_hat_val = r_hat(droplet_cts)
-#     if np.isnan(r_hat_val):
-#         # print(np.nan)
-#         return np.nan
-#     elif r_hat_val == 1:
-#         # print(1)
-#         return 1
-#     else:
-#
-#         lp_rhat = loglik_trinom_prof(droplet_cts, r_hat_val)
-#         chi_sq = sps.chi2.ppf(level, 1)
-#
-#         try:
-#             root = spo.brentq(lambda r: 2*(loglik_trinom_prof(droplet_cts,r) - lp_rhat) + chi_sq,
-#                 a=r_hat_val,
-#                 b=0.9999
-#             )
-#             return root
-#         except ValueError:
-#             return np.nan
+
 ##------------------------------------------------------------------------------------------------##
 def calc_error(droplet_cts, mode, level=0.95):
     """
@@ -414,7 +348,7 @@ if __name__ == '__main__':
     gc = gspread.service_account(filename="cowwid-wave5-e31fa2771e32.json")
     wwtp_df = get_wwtp_df("data/wwtp_info.csv")
 
-    os.chdir("/Volumes/PCR_Cowwid/01_dPCR_data/01_Stilla/NCX_CowwidVariants/04_Delta_Monitoring_Excel_new")
+    os.chdir("/Volumes/PCR_Cowwid/01_dPCR_data/01_Stilla/NCX_CowwidVariants/04_Variant_Monitoring_Excels")
     excel_list = sorted(glob.glob("**/[!~]*.xlsx"))
 
     variant_df = pd.DataFrame()
@@ -496,9 +430,10 @@ if __name__ == '__main__':
 
     variant_df.drop(columns=variant_df.filter(regex="_NegativeDroplets$").columns, inplace=True)
 
-    # with pd.ExcelWriter("VariantResults.xlsx", date_format="YYYY-MM-DD", engine="openpyxl") as writer:
-    #     variant_df.to_excel(writer, sheet_name="Results", index=True)
-    os.chdir("/Volumes/KatahdinHD/ResilioSync/DATA/pydata/cowwid/cowwid_website/variant_monitoring")
+    # with pd.ExcelWriter(f"VariantResults_{datetime.now().date()}.xlsx", date_format="YYYY-MM-DD", engine="openpyxl") as writer:
+    variant_df.to_csv(f"VariantResults_{datetime.now().date()}.csv", index=True)
+
+    os.chdir("/Volumes/ChasseralSSD/ResilioSync/DATA/pydata/cowwid/cowwid_website/variant_monitoring")
     ##Upload to Google_sheet
 
     droplet_cols = [
@@ -530,8 +465,8 @@ if __name__ == '__main__':
     calc_df = final_variant_df[calc_cols]
 
     final_variant_df["NegativeDroplets"] = calc_df.apply(calc_neg_droplets,axis=1)
-    final_variant_df["PercMutation"] = calc_df.apply(calc_perc_mutation,axis=1)
-    final_variant_df["r̂"] = calc_df.apply(r_hat,axis=1)
+    # final_variant_df["PercMutation"] = calc_df.apply(calc_perc_mutation,axis=1)
+    final_variant_df["PercMutation"] = calc_df.apply(r_hat,axis=1) * 100
     final_variant_df["lower_ci95"] = calc_df.apply(calc_error,axis=1,mode="lower",level=0.95)*100
     final_variant_df["upper_ci95"] = calc_df.apply(calc_error,axis=1,mode="upper",level=0.95)*100
 
