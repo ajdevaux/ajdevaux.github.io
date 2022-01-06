@@ -53,7 +53,7 @@ def sample_name_parser(string_to_parse, new_dict):
 
                 new_dict["sample_type"] = substr
 
-            elif (substr in ("2020","2021")) & (len(substr) == 4):
+            elif (substr in ("2020","2021","2022")) & (len(substr) == 4):
                 year = substr
                 month = string_to_parse[j+1]
                 dayrep = string_to_parse[j+2]
@@ -144,16 +144,16 @@ def _parse_assay_counts(droplet_cts):
     """
     if type(droplet_cts) == pd.Series:
         tot_ct = droplet_cts.iloc[0] #TotalDroplets
-        fam_ct = droplet_cts.iloc[1] #FAM single-positive droplets
-        hex_ct = droplet_cts.iloc[2] #HEX single-positive droplets
-        cy5_ct = droplet_cts.iloc[3] #Cy5 single-positive droplets
-        dbl_ct = droplet_cts.iloc[4] #Double-positive droplets (either FAM+HEX or Cy5+HEX)
+        dbl_ct = droplet_cts.iloc[1] #Double-positive droplets (either FAM+HEX or Cy5+HEX)
+        fam_ct = droplet_cts.iloc[2] #FAM single-positive droplets
+        hex_ct = droplet_cts.iloc[3] #HEX single-positive droplets
+        cy5_ct = droplet_cts.iloc[4] #Cy5 single-positive droplets
     elif type(droplet_cts) == tuple:
         tot_ct = droplet_cts[0] #TotalDroplets
-        fam_ct = droplet_cts[1] #FAM single-positive droplets
-        hex_ct = droplet_cts[2] #HEX single-positive droplets
-        cy5_ct = droplet_cts[3] #Cy5 single-positive droplets
-        dbl_ct = droplet_cts[4] #Double-positive droplets (either FAM+HEX or Cy5+HEX)
+        dbl_ct = droplet_cts[1] #Double-positive droplets (either FAM+HEX or Cy5+HEX)
+        fam_ct = droplet_cts[2] #FAM single-positive droplets
+        hex_ct = droplet_cts[3] #HEX single-positive droplets
+        cy5_ct = droplet_cts[4] #Cy5 single-positive droplets
 
     if np.isnan(cy5_ct):##DELTA Assay
         mutat_ct = dbl_ct #Mutation-positive droplets
@@ -374,8 +374,9 @@ if __name__ == '__main__':
         results_df = pd.read_excel(excel,engine="openpyxl",sheet_name="Results")
         df_cols = [col for col in results_df.columns if re.search('|'.join(cols_to_use), col)]
         results_df = results_df[df_cols].copy()
+        results_df.columns = results_df.columns.str.lower()
 
-        chamber_df = results_df["ChamberName"].str.rstrip().str.split("_")
+        chamber_df = results_df["chambername"].str.rstrip().str.split("_")
         fn_split = excel.split("_")
         run_date = fn_split[0]
         run_date = f"{run_date[:4]}-{run_date[4:6]}-{run_date[6:]}"
@@ -417,20 +418,22 @@ if __name__ == '__main__':
             sample_date = new_dict["sample_date"]
 
             line_df = pd.DataFrame.from_dict(new_dict, orient="index").T
+            line_df.columns = line_df.columns.str.lower()
+
 
             new_df = new_df.append(line_df, ignore_index=True)
 
-        results_df = pd.merge(new_df, results_df, on="ChamberID")
-        results_df.columns = results_df.columns.str.replace("NumberOf","")
+        results_df = pd.merge(new_df, results_df, on="chamberid")
+        results_df.columns = results_df.columns.str.replace("numberof","")
 
-        results_df["SampleName"] = results_df["wwtp"].str.cat(
+        results_df["samplename"] = results_df["wwtp"].str.cat(
             results_df["sample_date"],
             sep="_",
             na_rep=results_df["run_date"]
         )
 
-        channels = results_df.filter(regex="Droplets$").columns.to_list()
-        results_df.filter(regex="Droplets$").columns.to_list()
+        channels = results_df.filter(regex="droplets$").columns.to_list()
+        results_df.filter(regex="droplets$").columns.to_list()
         # print(channels)
 
         variant_df = pd.concat([variant_df,results_df], axis=0, ignore_index=True)
@@ -442,7 +445,7 @@ if __name__ == '__main__':
             else pd.NA
     )
 
-    variant_df.drop(columns=variant_df.filter(regex="_NegativeDroplets$").columns, inplace=True)
+    variant_df.drop(columns=variant_df.filter(regex="_negativedroplets$").columns, inplace=True)
 
     # with pd.ExcelWriter(f"VariantResults_{datetime.now().date()}.xlsx", date_format="YYYY-MM-DD", engine="openpyxl") as writer:
     variant_df.to_csv(f"VariantResults_{datetime.now().date()}.csv", index=True)
@@ -452,11 +455,11 @@ if __name__ == '__main__':
 
     droplet_cols = [
         "wwtp","sample_date","target_variant",
-        "TotalDroplets",
-        "double_PositiveDroplets",
-        "HEX_single_PositiveDroplets",
-        "FAM_single_PositiveDroplets",
-        "Cy5_single_PositiveDroplets",
+        "totaldroplets",
+        "double_positivedroplets",
+        "fam_single_positivedroplets",
+        "hex_single_positivedroplets",
+        "cy5_single_positivedroplets",
     ]
 
     final_variant_df = variant_df[droplet_cols].copy()
@@ -469,22 +472,23 @@ if __name__ == '__main__':
     ]).sum(min_count=1)
 
     calc_cols = [
-        "TotalDroplets",
-        "FAM_single_PositiveDroplets",
-        "HEX_single_PositiveDroplets",
-        "Cy5_single_PositiveDroplets",
-        "double_PositiveDroplets"
+        "totaldroplets",
+        "double_positivedroplets",
+        "fam_single_positivedroplets",
+        "hex_single_positivedroplets",
+        "cy5_single_positivedroplets",
+        "double_positivedroplets",
     ]
 
     calc_df = final_variant_df[calc_cols]
 
-    final_variant_df["NegativeDroplets"] = calc_df.apply(calc_neg_droplets,axis=1)
+    final_variant_df["negativedroplets"] = calc_df.apply(calc_neg_droplets,axis=1)
 
-    final_variant_df["PercMutation"] = calc_df.apply(r_hat,axis=1) * 100
+    final_variant_df["percmutation"] = calc_df.apply(r_hat,axis=1) * 100
     final_variant_df["lower_ci95"] = calc_df.apply(calc_error,axis=1,mode="lower",level=0.95)*100
     final_variant_df["upper_ci95"] = calc_df.apply(calc_error,axis=1,mode="upper",level=0.95)*100
-    final_variant_df["hCoV19Concentration_(gc/rxn)"] = calc_df.apply(ddpcr_concentration,axis=1)
-    
+    final_variant_df["hcov19concentration_(gc/rxn)"] = calc_df.apply(ddpcr_concentration,axis=1)
+
     final_variant_df.to_csv("data/variant_data.csv")
 
     gsheet = gc.open("COWWID LAB SHEET")

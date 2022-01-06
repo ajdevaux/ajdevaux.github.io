@@ -18,7 +18,7 @@ TOOLS = "reset,xpan,xwheel_zoom,xbox_zoom,save"
 
 plot_props = {
     "x":"sample_date",
-    "y":"PercMutation",
+    "y":"percmutation",
     "line_width":3
 }
 
