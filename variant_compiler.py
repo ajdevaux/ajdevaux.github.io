@@ -450,7 +450,7 @@ if __name__ == '__main__':
     # with pd.ExcelWriter(f"VariantResults_{datetime.now().date()}.xlsx", date_format="YYYY-MM-DD", engine="openpyxl") as writer:
     variant_df.to_csv(f"VariantResults_{datetime.now().date()}.csv", index=True)
 
-    os.chdir("/Volumes/ChasseralSSD/ResilioSync/DATA/pydata/cowwid/cowwid_website/variant_monitoring")
+    os.chdir("/Users/dejavu/Data/cowwid/cowwid_website/variant_monitoring")
     ##Upload to Google_sheet
 
     droplet_cols = [
