@@ -67,10 +67,10 @@ for i,wwtp in enumerate(wwtp_list):
     delta_src = ColumnDataSource(delta_df)
     omi_src = ColumnDataSource(omicron_df)
 
-    p.line(source=delta_src,color="lightgreen",legend_label="S:L452R (Delta/B.1.617.2)",**plot_props)
+    p.line(source=delta_src,color="lightgreen",legend_label="S:L452R (Delta)",**plot_props)
     p.circle(source=delta_src,color="green", size=6,**plot_props)
 
-    p.line(source=omi_src,color="orange",legend_label="HV69-70 (Omicron-BA.1/B.1.1.529)",**plot_props)
+    p.line(source=omi_src,color="orange",legend_label="HV69-70 (Omicron-BA.1)",**plot_props)
     p.circle(source=omi_src,color="darkorange", size=6,**plot_props)
 
 
