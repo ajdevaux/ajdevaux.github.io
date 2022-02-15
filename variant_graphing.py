@@ -112,6 +112,14 @@ logo1 = Div(text=
     <img src='images/logo_epfl_white.png' style="width:169px;height:49;border:10px solid black;">
     """
 )
+note1 = Div(text=
+    """
+    <p style="color:white;">Note to the Viewer:</p>
+    <p style="color:white;">These data represent percent values for the Delta and Omicron (subclade
+    BA.1) variants, and should not be used to infer absolute numbers of SARS-CoV-2/hCoV-2019 in Wastewater
+    </p>
+    """
+)
 footer = Div(text=
     """
     <p style="color:white;">These data made possible by the tireless work of:</p>
@@ -129,4 +137,4 @@ footer = Div(text=
 )
 header = row(div1,logo1, sizing_mode="scale_width")
 grid = gridplot(plot_list,ncols=2,toolbar_location="left")
-show(column(header,grid,footer),background="black")
+show(column(header,note1,grid,footer),background="black")
