@@ -177,14 +177,14 @@ def calc_neg_droplets(droplet_cts):
 
     return neg_ct
 ##------------------------------------------------------------------------------------------------##
-def calc_perc_mutation(droplet_cts):
-
-    tot_ct, mutat_ct, wldtp_ct, unkwn_ct = _parse_assay_counts(droplet_cts)
-
-    pos_ct = mutat_ct + wldtp_ct + unkwn_ct
-    perc_mut = mutat_ct / pos_ct*100
-
-    return perc_mut
+# def calc_perc_mutation(droplet_cts):
+#
+#     tot_ct, mutat_ct, wldtp_ct, unkwn_ct = _parse_assay_counts(droplet_cts)
+#
+#     pos_ct = mutat_ct + wldtp_ct + unkwn_ct
+#     perc_mut = mutat_ct / pos_ct*100
+#
+#     return perc_mut
 ##------------------------------------------------------------------------------------------------##
 def r_hat(droplet_cts):
     """
