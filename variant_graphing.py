@@ -37,7 +37,8 @@ for i,wwtp in enumerate(wwtp_list):
     subplot_df = variant_df[variant_df["wwtp"]==wwtp].copy()
 
     delta_df = subplot_df[subplot_df["target_variant"] ==  "S:L452R (Delta)"]
-    omicron_df = subplot_df[subplot_df["target_variant"] ==  '69-70del (Alpha, Omicron)']
+    omicron1_df = subplot_df[subplot_df["target_variant"] ==  "69-70del (Alpha, Omicron-BA.1)"]
+    omicron2_df = subplot_df[subplot_df["target_variant"] ==  "ORF1a-d3675-3677"]
 
     if i > 0:
         x_range = plot_list[0].x_range
@@ -65,14 +66,17 @@ for i,wwtp in enumerate(wwtp_list):
     p.yaxis.axis_label_text_font_size = '10pt'
 
     delta_src = ColumnDataSource(delta_df)
-    omi_src = ColumnDataSource(omicron_df)
+    omi1_src = ColumnDataSource(omicron1_df)
+    omi2_src = ColumnDataSource(omicron2_df)
 
     p.line(source=delta_src,color="lightgreen",legend_label="S:L452R (Delta)",**plot_props)
     p.circle(source=delta_src,color="green", size=6,**plot_props)
 
-    p.line(source=omi_src,color="orange",legend_label="HV69-70 (Omicron-BA.1)",**plot_props)
-    p.circle(source=omi_src,color="darkorange", size=6,**plot_props)
+    p.line(source=omi1_src,color="orange",legend_label="HV69-70 (Omicron-BA.1)",**plot_props)
+    p.circle(source=omi1_src,color="darkorange", size=6,**plot_props)
 
+    p.line(source=omi2_src,color="magenta",legend_label="ORF1a-Δ3675-3677",**plot_props)
+    p.circle(source=omi2_src,color="red", size=6,**plot_props)
 
     p.add_layout(
         Whisker(
@@ -83,12 +87,18 @@ for i,wwtp in enumerate(wwtp_list):
     )
     p.add_layout(
         Whisker(
-            source=omi_src,
+            source=omi1_src,
             line_color="darkorange",
             **whisker_props
         )
     )
-
+    p.add_layout(
+        Whisker(
+            source=omi2_src,
+            line_color="red",
+            **whisker_props
+        )
+    )
     p.legend.location = "center_left"
     # p.legend.click_policy="hide"
 
@@ -114,6 +124,9 @@ logo1 = Div(text=
 )
 note1 = Div(text=
     """
+    <p style="color:pink;">A more inclusive Assay for the Omicron variant (ORF1a-Δ3675-3677), which detects both BA.1 and BA.2 subclades
+    has been test and will now be used in place of the original HV69-70 Assay</p>
+    <br>
     <p style="color:white;">Note to the Viewer:</p>
     <p style="color:white;">These data represent percent values for the Delta and Omicron (subclade
     BA.1) variants, and should not be used to infer absolute numbers of SARS-CoV-2/hCoV-2019 in Wastewater

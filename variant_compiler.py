@@ -143,26 +143,35 @@ def _parse_assay_counts(droplet_cts):
     Ask Lea Caduff for more details
     """
     if type(droplet_cts) == pd.Series:
-        tot_ct = droplet_cts.iloc[0] #TotalDroplets
-        dbl_ct = droplet_cts.iloc[1] #Double-positive droplets (either FAM+HEX or Cy5+HEX)
-        fam_ct = droplet_cts.iloc[2] #FAM single-positive droplets
-        hex_ct = droplet_cts.iloc[3] #HEX single-positive droplets
-        cy5_ct = droplet_cts.iloc[4] #Cy5 single-positive droplets
+        target_variant = droplet_cts.iloc[0] ##Assay name
+        tot_ct = droplet_cts.iloc[1] #TotalDroplets
+        dbl_ct = droplet_cts.iloc[2] #Double-positive droplets (either FAM+HEX or Cy5+HEX)
+        fam_ct = droplet_cts.iloc[3] #FAM single-positive droplets
+        hex_ct = droplet_cts.iloc[4] #HEX single-positive droplets
+        cy5_ct = droplet_cts.iloc[5] #Cy5 single-positive droplets
     elif type(droplet_cts) == tuple:
-        tot_ct = droplet_cts[0] #TotalDroplets
-        dbl_ct = droplet_cts[1] #Double-positive droplets (either FAM+HEX or Cy5+HEX)
-        fam_ct = droplet_cts[2] #FAM single-positive droplets
-        hex_ct = droplet_cts[3] #HEX single-positive droplets
-        cy5_ct = droplet_cts[4] #Cy5 single-positive droplets
+        target_variant = droplet_cts.iloc[0] ##Assay name
+        tot_ct = droplet_cts[1] #TotalDroplets
+        dbl_ct = droplet_cts[2] #Double-positive droplets (either FAM+HEX or Cy5+HEX)
+        fam_ct = droplet_cts[3] #FAM single-positive droplets
+        hex_ct = droplet_cts[4] #HEX single-positive droplets
+        cy5_ct = droplet_cts[5] #Cy5 single-positive droplets
 
-    if np.isnan(cy5_ct):##DELTA Assay
+    # if np.isnan(cy5_ct):##DELTA/OMICRON-BA2 Assay
+    if target_variant == "S:L452R (Delta)":##DELTA/OMICRON-BA2 Assay
         mutat_ct = dbl_ct #Mutation-positive droplets
         wldtp_ct = fam_ct #Mutation-negative, SARS-CoV-2 positive droplets ("wildtype")
         unkwn_ct = hex_ct #Unknown-yet-positive droplets; Right now unused
-    elif np.isnan(fam_ct):##OMICRON Assay
+    # elif np.isnan(fam_ct):##OMICRON-BA1 Assay
+    elif target_variant == "69-70del (Alpha, Omicron-BA.1)":##OMICRON-BA1 Assay
         mutat_ct = hex_ct #Mutation-positive droplets
         wldtp_ct = dbl_ct #Mutation-negative, SARS-CoV-2 positive droplets ("wildtype")
         unkwn_ct = cy5_ct #Unknown-yet-positive droplets; Right now unused
+    elif target_variant == "ORF1a-d3675-3677":
+        mutat_ct = cy5_ct #Mutation-positive droplets
+        wldtp_ct = dbl_ct #Mutation-negative, SARS-CoV-2 positive droplets ("wildtype")
+        unkwn_ct = hex_ct #Unknown-yet-positive droplets; Right now unused
+
     else:
         raise TypeError("That boy ain't right")
 
@@ -385,7 +394,9 @@ if __name__ == '__main__':
         if target in ("Delta","L452R","157-158del"):
             target = "S:L452R (Delta)"
         elif target in ("69-70del","Omicron"):
-            target = "69-70del (Alpha, Omicron)"
+            target = "69-70del (Alpha, Omicron-BA.1)"
+        elif target in ("ORF1a-d3675-3677"):
+            target = "ORF1a-d3675-3677"
 
         sethr = fn_split[-1].split(".")[0]
         if (len(sethr) == 2) & sethr.isdigit():
@@ -449,7 +460,7 @@ if __name__ == '__main__':
 
     # with pd.ExcelWriter(f"VariantResults_{datetime.now().date()}.xlsx", date_format="YYYY-MM-DD", engine="openpyxl") as writer:
     variant_df.to_csv(f"VariantResults_{datetime.now().date()}.csv", index=True)
-
+    lock(f"VariantResults_{datetime.now().date()}.csv")
     os.chdir("/Users/dejavu/Data/cowwid/cowwid_website/variant_monitoring")
     ##Upload to Google_sheet
 
@@ -464,14 +475,16 @@ if __name__ == '__main__':
 
     final_variant_df = variant_df[droplet_cols].copy()
     final_variant_df.dropna(axis=0,subset=["sample_date"],inplace=True)
+    final_variant_df = final_variant_df[final_variant_df["totaldroplets"]!=0]
 
     final_variant_df = final_variant_df.groupby([
         "wwtp",
         "sample_date",
         "target_variant"
-    ]).sum(min_count=1)
+    ]).sum(min_count=1).reset_index()
 
     calc_cols = [
+        "target_variant",
         "totaldroplets",
         "double_positivedroplets",
         "fam_single_positivedroplets",
@@ -491,8 +504,8 @@ if __name__ == '__main__':
 
     final_variant_df.to_csv("data/variant_data.csv")
 
-    gsheet = gc.open("COWWID LAB SHEET")
-    worksheet = gsheet.worksheet("variant_monitoring")
-    worksheet.clear()
-
-    gsdf.set_with_dataframe(worksheet, final_variant_df, include_index=True)
+    # gsheet = gc.open("COWWID LAB SHEET")
+    # worksheet = gsheet.worksheet("variant_monitoring")
+    # worksheet.clear()
+    #
+    # gsdf.set_with_dataframe(worksheet, final_variant_df, include_index=True)
