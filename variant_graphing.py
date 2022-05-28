@@ -99,7 +99,7 @@ for i,wwtp in enumerate(wwtp_list):
             **whisker_props
         )
     )
-    p.legend.location = "center_left"
+    p.legend.location = "center_right"
     # p.legend.click_policy="hide"
 
     plot_list.append(p)

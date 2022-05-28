@@ -459,8 +459,8 @@ if __name__ == '__main__':
     variant_df.drop(columns=variant_df.filter(regex="_negativedroplets$").columns, inplace=True)
 
     # with pd.ExcelWriter(f"VariantResults_{datetime.now().date()}.xlsx", date_format="YYYY-MM-DD", engine="openpyxl") as writer:
-    variant_df.to_csv(f"VariantResults_{datetime.now().date()}.csv", index=True)
-    lock(f"VariantResults_{datetime.now().date()}.csv")
+    # variant_df.to_csv(f"VariantResults_{datetime.now().date()}.csv", index=True)
+    # lock(f"VariantResults_{datetime.now().date()}.csv")
     os.chdir("/Users/dejavu/Data/cowwid/cowwid_website/variant_monitoring")
     ##Upload to Google_sheet
 
@@ -501,11 +501,11 @@ if __name__ == '__main__':
     final_variant_df["lower_ci95"] = calc_df.apply(calc_error,axis=1,mode="lower",level=0.95)*100
     final_variant_df["upper_ci95"] = calc_df.apply(calc_error,axis=1,mode="upper",level=0.95)*100
     final_variant_df["hcov19concentration_(gc/rxn)"] = calc_df.apply(ddpcr_concentration,axis=1)
-
+    final_variant_df.set_index("wwtp", inplace=True)
     final_variant_df.to_csv("data/variant_data.csv")
 
-    # gsheet = gc.open("COWWID LAB SHEET")
-    # worksheet = gsheet.worksheet("variant_monitoring")
-    # worksheet.clear()
-    #
-    # gsdf.set_with_dataframe(worksheet, final_variant_df, include_index=True)
+    gsheet = gc.open("COWWID LAB SHEET")
+    worksheet = gsheet.worksheet("variant_monitoring")
+    worksheet.clear()
+
+    gsdf.set_with_dataframe(worksheet, final_variant_df, include_index=True)
