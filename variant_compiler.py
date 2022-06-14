@@ -158,7 +158,7 @@ def _parse_assay_counts(droplet_cts):
         cy5_ct = droplet_cts[5] #Cy5 single-positive droplets
 
     # if np.isnan(cy5_ct):##DELTA/OMICRON-BA2 Assay
-    if target_variant == "S:L452R (Delta)":##DELTA/OMICRON-BA2 Assay
+    if (target_variant == "S:L452R (Delta)") | (target_variant == "S:L452R (Omicron-BA.4/5)"):##DELTA/OMICRON-BA4-5 Assay
         mutat_ct = dbl_ct #Mutation-positive droplets
         wldtp_ct = fam_ct #Mutation-negative, SARS-CoV-2 positive droplets ("wildtype")
         unkwn_ct = hex_ct #Unknown-yet-positive droplets; Right now unused
@@ -389,20 +389,26 @@ if __name__ == '__main__':
         fn_split = excel.split("_")
         run_date = fn_split[0]
         run_date = f"{run_date[:4]}-{run_date[4:6]}-{run_date[6:]}"
-
-        target = fn_split[2]
-        if target in ("Delta","L452R","157-158del"):
-            target = "S:L452R (Delta)"
-        elif target in ("69-70del","Omicron"):
-            target = "69-70del (Alpha, Omicron-BA.1)"
-        elif target in ("ORF1a-d3675-3677"):
-            target = "ORF1a-d3675-3677"
-
         sethr = fn_split[-1].split(".")[0]
         if (len(sethr) == 2) & sethr.isdigit():
             run_date = f"{run_date}-{sethr}"
         else:
             run_date = f"{run_date}-00"
+        print(run_date)
+
+        target = fn_split[2]
+        if (target in ("Delta","L452R","157-158del")) & (run_date < "2022-06-01"):
+            target = "S:L452R (Delta)"
+            print("delta")
+        elif (target in ("Delta","L452R","157-158del")) & (run_date > "2022-06-01"):
+            target = "S:L452R (Omicron-BA.4/5)"
+            print("omicron")
+        elif target in ("69-70del","Omicron"):
+            target = "69-70del (Alpha, Omicron-BA.1)"
+        elif target in ("ORF1a-d3675-3677"):
+            target = "ORF1a-d3675-3677"
+
+
 
         new_df = pd.DataFrame()
 
