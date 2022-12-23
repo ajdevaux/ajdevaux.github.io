@@ -129,7 +129,7 @@ for i,wwtp in enumerate(wwtp_dict.keys()):
 # dum_fig.add_layout( Legend(click_policy='hide',location='top_left',border_line_alpha=0,items=legend_items) )
 
 curdoc().theme = 'light_minimal'
-output_file('../respv_dashboard/respv_dashboard.html',title="Respiratory Virus Monitoring Dashboard")
+output_file('respv_dashboard.html',title="Respiratory Virus Monitoring Dashboard")
 
 div1 = Div(text=
     """
