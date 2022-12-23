@@ -136,7 +136,7 @@ div1 = Div(text=
     <style>
         body { background: #FFFFFF; }
     </style>
-    <h1 style="color:black;">Influenza and Respiratory Syncytial Virus Prevalence in Swiss Wastewater</h1>
+    <h2 style="color:black;">Influenza and Respiratory Syncytial Virus Prevalence in Swiss Wastewater</h2>
     """
 )
 logo1 = Div(text=
@@ -163,35 +163,18 @@ note1 = Div(text=
 )
 footer = Div(text=
     """
-
-    <!doctype html>
-    <html lang="en">
-        <head>
-            <!-- Required meta tags -->
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <meta name="Description" content="">
-            <meta name="author" content="eawag">
-            <meta name="Copyright" content="Copyright (c) 2020 eawag, all rights reserved.">
-            <title>SARS-CoV-2 in Wastewater</title>
-
-        </head>
-        <body style="background-color:#efefef">
-
-            <nav class="navbar " style="background-color: #118EC6;">
-            <a class="navbar-brand" href="#" style="padding-left:30px">
-                <font style="color:white;font-size:30px;padding-left:10px">SARS-CoV-2 in Wastewater</font>
-            </a>
-            <div class="row">
-                <a class="navbar-brand" href="https://www.eawag.ch/en/" style="padding-left:30px">
-                    <img src="static/img/eawag.svg" width="180" height="50" >
-                </a>
-                <a class="navbar-brand" href="https://actu.epfl.ch/" style="padding-right:30px">
-                    <img src="static/img/epfl.svg" width="160" height="40" >
-                </a>
-            </div>
+    <p style="color:black;">These data made possible by:</p>
+    <ul style="color:black;">
+        <li>Aurélie Holschneider</li>
+        <li>Sarah Nadeau</li>
+        <li>Charlie Gan</li>
+        <li>Franziska Böni</li>
+        <li>Lea Caduff</li>
+        <li>A.J. Devaux (<a href = "mailto:alexander.devaux@eawag.ch">Webmaster</a>)</li>
+        <li>And the rest of the Eawag & EPFL Team</li>
+    </ul>
     """
 )
-header = row(footer, sizing_mode="stretch_both")
+header = row(div1,logo1,logo2)#, sizing_mode="stretch_both")
 grid = gridplot(plot_list,ncols=3,toolbar_location="left",merge_tools=True,sizing_mode="scale_both")
-show(column(footer,note1,grid),background="black")
+show(column(header,note1,grid,footer),background="black")
