@@ -169,6 +169,7 @@ footer = Div(text=
         <li>Sarah Nadeau</li>
         <li>Charlie Gan</li>
         <li>Franziska Böni</li>
+        <li>Laura Brülisauer</li>
         <li>Lea Caduff</li>
         <li>A.J. Devaux (<a href = "mailto:alexander.devaux@eawag.ch">Webmaster</a>)</li>
         <li>And the rest of the Eawag & EPFL Team</li>
