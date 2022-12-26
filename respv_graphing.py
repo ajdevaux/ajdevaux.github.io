@@ -177,4 +177,4 @@ footer = Div(text=
 )
 header = row(div1,logo1,logo2)#, sizing_mode="stretch_both")
 grid = gridplot(plot_list,ncols=3,toolbar_location="left",merge_tools=True,sizing_mode="scale_both")
-show(column(header,note1,grid,footer),background="black")
+show(grid)#column(header,note1,grid,footer),background="black")
