@@ -1,5 +1,6 @@
 from bokeh.plotting import figure, show, output_file, ColumnDataSource
 from bokeh.models import HoverTool, Whisker, Div,Legend,LegendItem,DatetimeTickFormatter,PrintfTickFormatter
+from bokeh.models.widgets import PreText
 from bokeh.layouts import row,column, gridplot
 from bokeh.io import curdoc
 from datetime import datetime
@@ -11,8 +12,7 @@ data = "data/respv_data.csv"
 respv_df = pd.read_csv(data)
 respv_df.set_index("sample_date",inplace=True)
 respv_df.index = pd.to_datetime(respv_df.index)
-
-
+curdoc().theme = 'light_minimal'
 
 wwtp_dict={
     "ARA Werdhölzli":"Zürich",
@@ -22,10 +22,10 @@ wwtp_dict={
     "CDA Lugano":"Lugano",
     "ARA Sensetal":"Laupen"
 }
-channels = ("IAV-M","IBV-M","RSV")
-colors = ("red","lightgreen","orange")
-labels = ("Influenza A", "Influenza B", "RSV")
-TOOLS = "reset,xpan,xwheel_zoom,box_zoom,save"
+channels = ("IAV-M","IBV-M","RSV")#,"SARS-N2")
+colors = ("red","lightgreen","orange","lightblue")
+labels = ("Influenza A", "Influenza B", "RSV","SARS-CoV-2")
+TOOLS = "reset,pan,xwheel_zoom,box_zoom,save"
 
 for chan in channels:
     respv_df[f"{chan}_low-range"] = respv_df[f"{chan}_normLoad-(gc/d/1e5)"] - respv_df[f"{chan}_normLoad-range"]*0.5
@@ -44,7 +44,6 @@ whisker_props = {
     "upper_head":None,
     "lower_head":None
 }
-
 plot_list = []
 for i,wwtp in enumerate(wwtp_dict.keys()):
     subplot_df = respv_df[respv_df["wwtp"]==wwtp].copy()
@@ -57,27 +56,28 @@ for i,wwtp in enumerate(wwtp_dict.keys()):
         y_range = (0, 9e12)
 
     p = figure(
-        plot_height=400,
-        plot_width=500,
+        plot_height=350,
+        plot_width=800,
         # sizing_mode='stretch_both',
         x_axis_type="datetime",
         title=wwtp_dict[wwtp],
         tools=TOOLS,
+        toolbar_location="above",
+        # y_axis_type="log",
         x_range=x_range,
         y_range=y_range
     )
 
-    # figure(, tools='pan', id="blue_fig")
-    p.title.text_font_size = '16pt'
+    # p.toolbar.autohide = True
+    p.title.text_font_size = '20pt'
 
     p.xaxis.axis_label = 'Sample Date'
-    p.xaxis.axis_label_text_font_size = '10pt'
-    p.xaxis.formatter=DatetimeTickFormatter(months = ['%m/%Y'])
+    p.xaxis.axis_label_text_font_size = '12pt'
+    p.xaxis.formatter=DatetimeTickFormatter(months = ['%d-%m-%Y'])
 
     p.yaxis.axis_label = 'Viral Load (gc/day/100,000 people)'
-    p.yaxis.axis_label_text_font_size = '10pt'
+    p.yaxis.axis_label_text_font_size = '12pt'
     p.yaxis.formatter= PrintfTickFormatter(format="%5e")
-
 
     respv_src = ColumnDataSource(subplot_df)
 
@@ -97,85 +97,51 @@ for i,wwtp in enumerate(wwtp_dict.keys()):
         )
 
     p.legend.location = "top_left"
+    p.legend.title = "Respiratory Virus"
     p.legend.click_policy="hide"
 
     plot_list.append(p)
 
-# legend1 = Legend(items=[("point1", plot_list[0])],
-#                  orientation="horizontal")
-#
-# p.add_layout(legend1, 'above')
-# renderer_list = []
-# color_list = []
-# for plot in plot_list:
-#     for i in range(5):
-#         color = choice(palette)
-#         renderer = plot.line(range(10),random(10),line_width=2,color=color)
-#         renderer_list += [renderer]
-#         color_list += [color]
-# legend_items = [LegendItem(label=color,renderers=[renderer for renderer in renderer_list if renderer.glyph.line_color==color]) for color in colors]
-#
-# ## Use a dummy figure for the LEGEND
-# dum_fig = figure(plot_width=300,plot_height=600,outline_line_alpha=0,toolbar_location=None)
-# # set the components of the figure invisible
-# for fig_component in [dum_fig.grid[0],dum_fig.ygrid[0],dum_fig.xaxis[0],dum_fig.yaxis[0]]:
-#     fig_component.visible = False
-# # The glyphs referred by the legend need to be present in the figure that holds the legend, so we must add them to the figure renderers
-# dum_fig.renderers += renderer_list
-# # set the figure range outside of the range of all glyphs
-# dum_fig.x_range.end = 1005
-# dum_fig.x_range.start = 1000
-# add the legend
-# dum_fig.add_layout( Legend(click_policy='hide',location='top_left',border_line_alpha=0,items=legend_items) )
 
-curdoc().theme = 'light_minimal'
-output_file('respv_dashboard.html',title="Respiratory Virus Monitoring Dashboard")
+output_file('plots.html',title="Respiratory Virus Monitoring Dashboard")
 
-div1 = Div(text=
-    """
-    <style>
-        body { background: #FFFFFF; }
-    </style>
-    <h2 style="color:black;">Influenza and Respiratory Syncytial Virus Prevalence in Swiss Wastewater</h2>
-    """
-)
-logo1 = Div(text=
-    """
-    <img src='images/ealogo-black.png' style="width:200px;height:42.5;border:10px solid white;">
-    """
-)
-logo2 = Div(text=
-    """
-    <img src='images/logo_epfl_black.png' style="width:169px;height:49;border:10px solid white;">
-    """
-)
-note1 = Div(text=
-    # """
-    # <p style="color:pink;">A more inclusive Assay for the Omicron variant (ORF1a-Δ3675-3677), which detects both BA.1 and BA.2 subclades
-    # has been test and will now be used in place of the original HV69-70 Assay</p>
-    # <br>
-    # <p style="color:white;">Note to the Viewer:</p>
-    # <p style="color:white;">These data represent percent values for the Delta and Omicron (subclade
-    # BA.1) variants, and should not be used to infer absolute numbers of SARS-CoV-2/hCoV-2019 in Wastewater
-    # </p>
-    # """
-    """\n\n\n"""
-)
-footer = Div(text=
-    """
-    <p style="color:black;">These data made possible by:</p>
-    <ul style="color:black;">
-        <li>Aurélie Holschneider</li>
-        <li>Sarah Nadeau</li>
-        <li>Charlie Gan</li>
-        <li>Franziska Böni</li>
-        <li>Laura Brülisauer</li>
-        <li>Lea Caduff</li>
-        <li>A.J. Devaux (<a href = "mailto:alexander.devaux@eawag.ch">Webmaster</a>)</li>
-        <li>And the rest of the Eawag & EPFL Team</li>
-    </ul>
-    """
-)
-header = row(div1,logo1,logo2)#, sizing_mode="stretch_both")
-grid = gridplot(plot_list,ncols=3,toolbar_location="left",merge_tools=True,sizing_mode="scale_both")
-show(grid)#column(header,note1,grid,footer),background="black")
+
+# div1 = Div(text=
+#     """
+#     <style>
+#
+#     </style>
+#     <h2 style="color:black;">Influenza and Respiratory Syncytial Virus Prevalence in Swiss Wastewater</h2>
+#     """
+# )
+# logo1 = Div(text=
+#     """
+#     <img src='images/ealogo-black.png' style="width:200px;height:42.5;border:10px #4587c1;">
+#     """
+# )
+# logo2 = Div(text=
+#     """
+#     <img src='images/logo_epfl_black.png' style="width:169px;height:49;border:10px #4587c1;">
+#     """
+# )
+# note1 = Div(text=
+#     # """
+#     # <p style="color:pink;">A more inclusive Assay for the Omicron variant (ORF1a-Δ3675-3677), which detects both BA.1 and BA.2 subclades
+#     # has been test and will now be used in place of the original HV69-70 Assay</p>
+#     # <br>
+#     # <p style="color:white;">Note to the Viewer:</p>
+#     # <p style="color:white;">These data represent percent values for the Delta and Omicron (subclade
+#     # BA.1) variants, and should not be used to infer absolute numbers of SARS-CoV-2/hCoV-2019 in Wastewater
+#     # </p>
+#     # """
+#     """\n\n\n"""
+# )
+
+# footer = Div(text=
+#     """
+#
+#     """
+# )
+# header = row(div1,logo1,logo2,note1,background="#4587c1",sizing_mode="stretch_width")#, sizing_mode="stretch_both")
+grid = gridplot(plot_list,ncols=1,toolbar_location="above",merge_tools=True)#,sizing_mode="stretch_width")
+show(grid)
