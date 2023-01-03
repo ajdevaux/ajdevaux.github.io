@@ -7,6 +7,7 @@ from datetime import datetime
 
 import pandas as pd
 import numpy as np
+from math import pi
 
 data = "data/respv_data.csv"
 respv_df = pd.read_csv(data)
@@ -44,6 +45,9 @@ whisker_props = {
     "upper_head":None,
     "lower_head":None
 }
+
+today = pd.to_datetime(datetime.now().date())
+prev_month = today - pd.Timedelta(days=60)
 plot_list = []
 for i,wwtp in enumerate(wwtp_dict.keys()):
     subplot_df = respv_df[respv_df["wwtp"]==wwtp].copy()
@@ -52,8 +56,8 @@ for i,wwtp in enumerate(wwtp_dict.keys()):
         x_range = plot_list[0].x_range
         y_range = plot_list[0].y_range
     else:
-        x_range = (pd.to_datetime("09-01-2022"), pd.to_datetime(datetime.now().date()))
-        y_range = (0, 9e12)
+        x_range = (prev_month,today)
+        y_range = (0, 1e13)
 
     p = figure(
         plot_height=350,
@@ -74,6 +78,7 @@ for i,wwtp in enumerate(wwtp_dict.keys()):
     p.xaxis.axis_label = 'Sample Date'
     p.xaxis.axis_label_text_font_size = '12pt'
     p.xaxis.formatter=DatetimeTickFormatter(months = ['%d-%m-%Y'])
+    p.xaxis.major_label_orientation = pi/4
 
     p.yaxis.axis_label = 'Viral Load (gc/day/100,000 people)'
     p.yaxis.axis_label_text_font_size = '12pt'
