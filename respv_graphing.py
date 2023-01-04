@@ -57,7 +57,7 @@ for i,wwtp in enumerate(wwtp_dict.keys()):
         y_range = plot_list[0].y_range
     else:
         x_range = (earliest,today)
-        y_range = (0, 1e13)
+        y_range = (0, 1.1e13)
 
     p = figure(
         plot_height=350,
