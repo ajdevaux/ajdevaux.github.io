@@ -47,7 +47,7 @@ whisker_props = {
 }
 
 today = pd.to_datetime(datetime.now().date())
-prev_month = today - pd.Timedelta(days=60)
+earliest = today - pd.Timedelta(days=365)
 plot_list = []
 for i,wwtp in enumerate(wwtp_dict.keys()):
     subplot_df = respv_df[respv_df["wwtp"]==wwtp].copy()
@@ -56,7 +56,7 @@ for i,wwtp in enumerate(wwtp_dict.keys()):
         x_range = plot_list[0].x_range
         y_range = plot_list[0].y_range
     else:
-        x_range = (prev_month,today)
+        x_range = (earliest,today)
         y_range = (0, 1e13)
 
     p = figure(
